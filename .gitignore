@@ -1,5 +1,5 @@
 ## Cluster generated files
 
 slurm-*
-*.snakemake/
-*/__pycache__/
+*.snakemake*
+*__pycache__*
