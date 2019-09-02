@@ -1,0 +1,35 @@
+locations:
+
+  sample_sheet: /home/didrio87/scripts/pipelines/asap/sample_sheet.csv
+  annotation: /scratch/didrio87/annotations/mouse/M21/gencode.vM21.annotation.gtf
+  fq_dir: /scratch/didrio87/projects/didrik/splicetools/fq/
+  genome: /scratch/didrio87/genomes/mouse/GRCm38.p6/GRCm38.primary_assembly.genome.fa
+  output_dir: /scratch/didrio87/projects/didrik/splicetools/asap/
+  miso_annotation_dir: /scratch/didrio87/annotations/mouse/miso/mm10
+
+parameters:
+
+  general:
+    read_length: 150
+    lib_type: paired
+
+  star:
+    index:
+      sjdb_overhang: true
+    align:
+      2-pass-mode: true
+
+  miso:
+    annotations:
+      - A3SS
+      - A5SS
+      - MXE
+      - RI
+      - SE
+
+  rmats:
+    cstat: 0.0001
+
+  whippet:
+    min_cov: 5 # Minimum number of reads for a single event to be included (default: 5)
+    min_sam: 1 # Minimum number of samples in a or in b for each event to be considered (default: 1)

@@ -1,0 +1,54 @@
+rule WhippetIndex:
+    input:
+        annotation = ANNOTATION,
+        genome = GENOME
+    output: path.join(WHIPPET_DIR, "index", "index.jls")
+    threads: 4
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "01:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    log: path.join(LOG_DIR, "whippet_index", "whippet_index.log")
+    script: "scripts/whippet_index.py"
+
+rule WhippetQuant:
+    input:
+        idx = rules.WhippetIndex.output,
+        reads = GetReads
+    output: path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz")
+    threads: 8
+    params:
+        output_dir = path.join(WHIPPET_DIR, "quant", "{sample}"),
+        partition = "main",
+        nodes = "1",
+        ntasks = "8",
+        time = "02:00:00",
+        mem = "16G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    log: path.join(LOG_DIR, "whippet_quant", "{sample}.log")
+    script: "scripts/whippet_quant.py"
+
+rule WhippetDelta:
+    input: expand(path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz"), sample=SAMPLES)
+    output: path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
+    threads: 4
+    params:
+        quant_path = path.join(WHIPPET_DIR, "quant"),
+        comparison = "{comparison}",
+        output_path = path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}"),
+        min_cov = config["parameters"]["whippet"]["min_cov"],
+        min_sam = config["parameters"]["whippet"]["min_sam"],
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "02:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    log: path.join(LOG_DIR, "whippet_delta", "{comparison}.log")
+    script: "scripts/whippet_delta.py"

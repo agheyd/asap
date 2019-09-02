@@ -1,0 +1,23 @@
+name: samtools
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - ca-certificates=2019.6.16=hecc5488_0
+  - certifi=2017.1.23=py34_0
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - ncurses=5.9=10
+  - openssl=1.0.2r=h14c3975_0
+  - pip=9.0.1=py34_0
+  - python=3.4.5=2
+  - readline=6.2=0
+  - samtools=1.3.1=0
+  - setuptools=32.3.1=py34_0
+  - sqlite=3.13.0=1
+  - tk=8.5.19=2
+  - wheel=0.29.0=py34_0
+  - xz=5.2.4=h14c3975_1001
+  - zlib=1.2.11=h14c3975_1004
+prefix: /home/didrio87/environments/miniconda3/envs/samtools
+

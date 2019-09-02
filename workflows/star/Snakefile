@@ -1,0 +1,44 @@
+rule GenerateIndex:
+    input:
+        GENOME
+    output:
+        path.join(STAR_DIR, "index", "Genome")
+    threads:
+        6
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "6",
+        time = "01:00:00",
+        mem = "32G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    log:
+        path.join(STAR_DIR, "logs", "index", "star_index.log")
+    conda:
+        "envs/star.yml"
+    script:
+        "scripts/star_index.py"
+
+rule StarAlign:
+    input:
+        star_idx = rules.GenerateIndex.output,
+        reads = GetReads
+    output:
+        path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam")
+    threads:
+        6
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "6",
+        time = "2:00:00",
+        mem = "32G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    log:
+        path.join(STAR_DIR, "logs", "alignment", "{sample}_alignment.log")
+    conda:
+        "envs/star.yml"
+    script:
+        "scripts/star_align.py"

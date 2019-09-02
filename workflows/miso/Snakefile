@@ -1,0 +1,126 @@
+#Local rules
+localrules: MISOBamList, MergeSum, MergeComp, AddMisoCoord
+
+rule MISOBamList:
+    input: expand(path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam"), sample=SAMPLES)
+    output: path.join(STAR_DIR, "merged_alignments", "lists", "{condition}.list")
+    threads: 1
+    params:
+        condition = "{condition}",
+        bam_dir = path.join(STAR_DIR, "alignments")
+    script: "scripts/create_bam_list.py"
+
+rule MergeBams:
+    input: rules.MISOBamList.output
+    output: path.join(STAR_DIR, "merged_alignments", "{condition}", "{condition}.merged.bam")
+    threads: 4
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "01:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    conda: "envs/samtools.yml"
+    log: path.join(LOG_DIR, "merge_bams", "{condition}.log")
+    script: "scripts/merge_bams.py"
+
+rule IndexBam:
+    input: rules.MergeBams.output
+    output: path.join(STAR_DIR, "merged_alignments", "{condition}", "{condition}.merged.bam.bai")
+    threads: 4
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "03:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    conda: "envs/samtools.yml"
+    log: path.join(LOG_DIR, "index_bams", "{condition}.log")
+    script: "scripts/index_bams.py"
+
+rule MisoRun:
+    input: rules.IndexBam.output
+    output: directory(path.join(MISO_RUN_DIR, "{condition}", "{idx}"))
+    threads: 16
+    params:
+        bam = path.join(STAR_DIR, "merged_alignments", "{condition}", "{condition}.merged.bam"),
+        idx_dir = path.join(MISO_IDX_DIR, "{idx}_indexed"),
+        read_len = config["parameters"]["general"]["read_length"],
+        partition = "main",
+        nodes = "1",
+        ntasks = "16",
+        time = "02:00:00",
+        mem = "16G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    conda: "envs/miso.yml"
+    log: path.join(LOG_DIR, "miso", "run", "{condition}.{idx}.log")
+    script: "scripts/miso_run.py"
+
+rule MisoSum:
+    input: rules.MisoRun.output
+    output: path.join(MISO_SUM_DIR, "{condition}", "{idx}", "summary", "{idx}.miso_summary")
+    threads: 1
+    params:
+        sample_dir = path.join(MISO_RUN_DIR, "{condition}", "{idx}"),
+        output_dir = path.join(MISO_SUM_DIR, "{condition}", "{idx}"),
+        partition = "main",
+        nodes = "1",
+        ntasks = "1",
+        time = "02:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    conda: "envs/miso.yml"
+    log: path.join(LOG_DIR, "miso", "summarize", "{condition}.{idx}.log")
+    script: "scripts/miso_sum.py"
+
+rule MergeSum:
+    input: expand(path.join(MISO_SUM_DIR, "{condition}", "{idx}", "summary", "{idx}.miso_summary"), condition=CONDITIONS, idx=MISO_IDX_NAMES)
+    output: path.join(MISO_SUM_DIR, "{condition}", "merged_summary", "{condition}.merged.miso_summary")
+    params:
+        sum_dir = MISO_SUM_DIR,
+        condition = "{condition}"
+    conda: "envs/pandas.yml"
+    script: "scripts/merge_sum.py"
+
+rule MisoComp:
+    input: expand(path.join(MISO_SUM_DIR, "{condition}", "merged_summary", "{condition}.merged.miso_summary"), condition=CONDITIONS)
+    output: path.join(MISO_COMP_DIR, "{comparison}", "{idx}_vs_{idx}", "bayes-factors", "{idx}_vs_{idx}.miso_bf")
+    threads: 1
+    params:
+        run_dir = MISO_RUN_DIR,
+        comparison = "{comparison}",
+        idx = "{idx}",
+        output_dir = path.join(MISO_COMP_DIR, "{comparison}"),
+        partition = "main",
+        nodes = "1",
+        ntasks = "1",
+        time = "02:00:00",
+        mem = "8G",
+        mail_user = "didrio87@zedat.fu-berlin.de",
+        mail_type = "end"
+    conda: "envs/miso.yml"
+    log: path.join(LOG_DIR, "miso", "compare", "{comparison}.{idx}_vs_{idx}.log")
+    script: "scripts/miso_comp.py"
+
+rule MergeComp:
+    input: expand(rules.MisoComp.output, comparison=COMPARISONS, idx=MISO_IDX_NAMES)
+    output: path.join(MISO_COMP_DIR, "{comparison}", "{comparison}.merged.miso_bf")
+    threads: 1
+    params:
+        comp_dir = MISO_COMP_DIR,
+        comp = "{comparison}"
+    conda: "envs/pandas.yml"
+    script: "scripts/merge_comp.py"
+
+rule AddMisoCoord:
+    input: rules.MergeComp.output
+    output: path.join(MISO_COMP_DIR, "{comparison}", "{comparison}.merged.w_coord.miso_bf")
+    threads: 1
+    conda: "envs/pandas.yml"
+    script: "scripts/add_coord.py"
