@@ -29,5 +29,5 @@ snakemake --use-conda -s path/to/asap/Snakefile
 ```
 7. Run pipeline on cluster:
 ```
-nohup python ~/asap/scripts/run_cluster.py path/to/asap/Snakefile &
+nohup python path/to/asap/scripts/run_cluster.py path/to/asap/Snakefile &
 ```
