@@ -9,15 +9,15 @@ Install
 1. Install [Miniconda](https://conda.io/en/latest/miniconda.html)
 2. Create pipeline directory:
 ```
-mkdir -p ~/asap
+mkdir -p path/to/asap
 ```
 3. Clone git repository
 ```
-git clone https://github.com/DidrikOlofsson/asap.git ~/asap
+git clone https://github.com/DidrikOlofsson/asap.git path/to/asap
 ```
 4. Create Snakemake environment from provided environment file
 ```
-conda env create -n snk -f ~/asap/envs/snakemake.yml
+conda env create -n snk -f path/to/asap/envs/snakemake.yml
 ```
 5. Activate environment
 ```
@@ -25,9 +25,9 @@ conda activate snk
 ```
 6. Run pipeline locally:
 ```
-snakemake --use-conda -s ~/asap/Snakefile
+snakemake --use-conda -s path/to/asap/Snakefile
 ```
 7. Run pipeline on cluster:
 ```
-nohup python ~/asap/scripts/run_cluster.py ~/asap/Snakefile &
+nohup python ~/asap/scripts/run_cluster.py path/to/asap/Snakefile &
 ```
