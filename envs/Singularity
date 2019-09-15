@@ -1,5 +1,6 @@
-Bootstrap: docker
-From: continuumio/miniconda3:latest
+bootstrap: library
+From:alpine:latest
+
 
 %post
-   conda install -c bioconda star
+   sudo apt-get install libopenblas-base r-base
