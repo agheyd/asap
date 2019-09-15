@@ -1,5 +1,5 @@
-bootstrap: library
-From:alpine:latest
+Bootstrap: library
+From: alpine:latest
 
 
 %post
