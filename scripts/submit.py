@@ -56,7 +56,7 @@ def RunSnake():
 
     cmd = (
     'snakemake '
-    '-j 20 '
+    '-j 40 '
     '--use-conda '
     '--use-singularity '
     '--singularity-args "--bind /scratch:/scratch " '
