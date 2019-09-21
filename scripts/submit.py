@@ -58,6 +58,8 @@ def RunSnake():
     'snakemake '
     '-j 20 '
     '--use-conda '
+    '--use-singularity '
+    '--singularity-args "--bind /scratch:/scratch " '
     '--cluster "{}" '
     '--restart-times 3 '
     '-s {} '
