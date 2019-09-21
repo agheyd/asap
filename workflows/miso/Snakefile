@@ -109,7 +109,7 @@ rule MisoComp:
     script: "scripts/miso_comp.py"
 
 rule MergeComp:
-    input: expand(rules.MisoComp.output, comparison=COMPARISONS, idx=MISO_IDX_NAMES)
+    input: expand(path.join(MISO_COMP_DIR, "{comparison}", "{idx}_vs_{idx}", "bayes-factors", "{idx}_vs_{idx}.miso_bf"), comparison=COMPARISONS, idx=MISO_IDX_NAMES)
     output: path.join(MISO_COMP_DIR, "{comparison}", "{comparison}.merged.miso_bf")
     threads: 1
     params:

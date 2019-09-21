@@ -1,7 +1,10 @@
+from os import path
+import pandas as pd
+
 def concat_sum_tables(file_list, output_path):
     df_list = []
     for f in file_list:
-        name = os.path.basename(f).split(".")[0]
+        name = path.basename(f).split(".")[0]
         df = pd.read_csv(f, sep="\t")
         df["type"] = name
         df_list.append(df)
