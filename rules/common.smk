@@ -22,6 +22,10 @@ def GetReads(wildcards):
 
     return reads
 
+## Cluster variables
+EMAIL = config["parameters"]["user"]["email"]
+EMAIL_TYPE = "none" if EMAIL == "" else "end"
+
 ## General input variables
 GENOME = config["locations"]["genome"]
 ANNOTATION = config["locations"]["annotation"]

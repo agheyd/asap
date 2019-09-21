@@ -8,7 +8,9 @@ locations:
   miso_annotation_dir: /scratch/didrio87/annotations/mouse/miso/mm10
 
 parameters:
-
+  user:
+    email: ""
+  
   general:
     read_length: 150
     lib_type: paired

@@ -10,8 +10,8 @@ rule WhippetIndex:
         ntasks = "4",
         time = "01:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     log: path.join(LOG_DIR, "whippet_index", "whippet_index.log")
     script: "scripts/whippet_index.py"
 
@@ -28,8 +28,8 @@ rule WhippetQuant:
         ntasks = "8",
         time = "02:00:00",
         mem = "16G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     log: path.join(LOG_DIR, "whippet_quant", "{sample}.log")
     script: "scripts/whippet_quant.py"
 
@@ -48,7 +48,7 @@ rule WhippetDelta:
         ntasks = "4",
         time = "02:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     log: path.join(LOG_DIR, "whippet_delta", "{comparison}.log")
     script: "scripts/whippet_delta.py"

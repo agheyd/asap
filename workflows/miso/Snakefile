@@ -20,8 +20,8 @@ rule MergeBams:
         ntasks = "4",
         time = "01:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     conda: "envs/samtools.yml"
     log: path.join(LOG_DIR, "merge_bams", "{condition}.log")
     script: "scripts/merge_bams.py"
@@ -36,8 +36,8 @@ rule IndexBam:
         ntasks = "4",
         time = "03:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     conda: "envs/samtools.yml"
     log: path.join(LOG_DIR, "index_bams", "{condition}.log")
     script: "scripts/index_bams.py"
@@ -55,8 +55,8 @@ rule MisoRun:
         ntasks = "16",
         time = "02:00:00",
         mem = "16G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     conda: "envs/miso.yml"
     log: path.join(LOG_DIR, "miso", "run", "{condition}.{idx}.log")
     script: "scripts/miso_run.py"
@@ -73,8 +73,8 @@ rule MisoSum:
         ntasks = "1",
         time = "02:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     conda: "envs/miso.yml"
     log: path.join(LOG_DIR, "miso", "summarize", "{condition}.{idx}.log")
     script: "scripts/miso_sum.py"
@@ -102,8 +102,8 @@ rule MisoComp:
         ntasks = "1",
         time = "02:00:00",
         mem = "8G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     conda: "envs/miso.yml"
     log: path.join(LOG_DIR, "miso", "compare", "{comparison}.{idx}_vs_{idx}.log")
     script: "scripts/miso_comp.py"
