@@ -1,6 +1,0 @@
-Bootstrap: library
-From: alpine:latest
-
-
-%post
-   sudo apt-get install libopenblas-base r-base
