@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#SBATCH --mail-user=didrio87@zedat.fu-berlin.de
-#SBATCH --mail-type=end
+#SBATCH --mail-type=none
 #SBATCH --job-name=ASAP
 #SBATCH --time=24:00:00
 #SBATCH --nodes=1-1
