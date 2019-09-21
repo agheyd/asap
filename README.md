@@ -6,28 +6,19 @@ Alternative splicing analysis in parallel using [MISO](https://miso.readthedocs.
 Install
 =======
 
-1. Install [Miniconda](https://conda.io/en/latest/miniconda.html)
-2. Create pipeline directory:
+1. Git clone this repository
 ```
-mkdir -p path/to/asap
+git clone https://github.com/agheyd/asap.git /path/to/dir
 ```
-3. Clone git repository
+
+2. Run install script
 ```
-git clone https://github.com/DidrikOlofsson/asap.git path/to/asap
+source /path/to/dir/install.sh
 ```
-4. Create Snakemake environment from provided environment file
+
+3. Edit sample_sheet.csv and config.yml to match the current experiment
+
+4. Launch pipeline
 ```
-conda env create -n snk -f path/to/asap/envs/snakemake.yml
-```
-5. Activate environment
-```
-conda activate snk
-```
-6. Run pipeline locally:
-```
-snakemake --use-conda -s path/to/asap/Snakefile
-```
-7. Run pipeline on cluster:
-```
-nohup python path/to/asap/scripts/run_cluster.py path/to/asap/Snakefile &
+sbatch /path/to/dir/scripts/cluster_submit.sh /path/to/dir/Snakefile
 ```
