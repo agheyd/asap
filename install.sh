@@ -2,7 +2,7 @@
 
 ## Set up symbolic links to submission scripts
 mkdir ~/bin
-S_SCRIPT=$(readlink -f scripts/submit_asap.py)
+S_SCRIPT=$(readlink -f scripts/submit.py)
 ln -s $S_SCRIPT ~/bin/submit_asap
 
 ## Install miniconda3
