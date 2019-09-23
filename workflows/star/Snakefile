@@ -11,8 +11,8 @@ rule GenerateIndex:
         ntasks = "6",
         time = "01:00:00",
         mem = "32G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     log:
         path.join(STAR_DIR, "logs", "index", "star_index.log")
     conda:
@@ -34,8 +34,8 @@ rule StarAlign:
         ntasks = "6",
         time = "2:00:00",
         mem = "32G",
-        mail_user = "didrio87@zedat.fu-berlin.de",
-        mail_type = "end"
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
     log:
         path.join(STAR_DIR, "logs", "alignment", "{sample}_alignment.log")
     conda:
