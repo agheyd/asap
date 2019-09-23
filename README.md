@@ -13,7 +13,7 @@ git clone https://github.com/agheyd/asap.git /path/to/dir
 
 2. Run install script
 ```
-source /path/to/dir/install.sh
+bash /path/to/dir/install.sh
 ```
 
 3. Edit sample_sheet.csv and config.yml to match the current experiment
