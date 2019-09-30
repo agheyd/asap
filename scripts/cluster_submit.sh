@@ -8,7 +8,18 @@
 #SBATCH --mem-per-cpu=4G
 #SBATCH --qos=medium
 
-SNAKEFILE=$1
+if [[ $1 ]]; then
+	SNAKEFILE=$1
+else
+	echo "Please provide a valid Snakefile"
+	exit 1
+fi
+
+EXTRA=""
+
+if [[ "$2" ]]; then
+	EXTRA="--until $2"
+fi
 
 ## Arrange PATH
 export PATH="$PATH:$HOME/bin"
@@ -18,5 +29,5 @@ export PATH="$PATH:$HOME/.julia/v0.6/Whippet/bin/"
 
 ## Launch pipeline
 module add Singularity snakemake
-submit_asap $SNAKEFILE
+submit_asap $SNAKEFILE $EXTRA
 module remove Singularity snakemake
