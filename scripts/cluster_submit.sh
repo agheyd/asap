@@ -32,6 +32,6 @@ export PATH="$PATH:$HOME/julia/bin"
 export PATH="$PATH:$HOME/.julia/v0.6/Whippet/bin/"
 
 ## Launch pipeline
-#module add Singularity snakemake
-echo submit_asap $SNAKEFILE $EXTRA
-#module remove Singularity snakemake
+module add Singularity snakemake
+submit_asap $SNAKEFILE $EXTRA
+module remove Singularity snakemake
