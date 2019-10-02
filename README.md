@@ -4,7 +4,7 @@ ASAP
 Alternative splicing analysis in parallel using [MISO](https://miso.readthedocs.io/en/fastmiso/), [rMATS](http://rnaseq-mats.sourceforge.net/) and [Whippet](https://github.com/timbitz/Whippet.jl)
 
 Install
-=======
+====
 
 1. Git clone this repository
 ```
@@ -16,9 +16,17 @@ git clone https://github.com/agheyd/asap.git /path/to/dir
 bash /path/to/dir/install.sh
 ```
 
-3. Edit sample_sheet.csv and config.yml to match the current experiment
+Run
+====
 
-4. Launch pipeline
+1. Edit sample_sheet.csv and config.yml to match your current experiment
+
+2. Launch pipeline
 ```
 sbatch /path/to/dir/scripts/cluster_submit.sh /path/to/dir/Snakefile
+```
+
+3. You can run individual tools by specifying this as a separate argument
+```
+sbatch /path/to/dir/scripts/cluster_submit.sh /path/to/dir/Snakefile miso|rmats|whippet
 ```
