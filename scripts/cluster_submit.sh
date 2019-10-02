@@ -17,8 +17,12 @@ fi
 
 EXTRA=""
 
-if [[ "$2" ]]; then
-	EXTRA="--until $2"
+if [[ "$2" == "whippet" ]]; then
+	EXTRA="--until WhippetDelta"
+elif [[ "$2" == "rmats" ]]; then
+	EXTRA="--until AddrMATSCoord"
+elif [[ "$2" == "miso" ]]; then
+	EXTRA="--until AddMisoCoord"
 fi
 
 ## Arrange PATH
@@ -28,6 +32,6 @@ export PATH="$PATH:$HOME/julia/bin"
 export PATH="$PATH:$HOME/.julia/v0.6/Whippet/bin/"
 
 ## Launch pipeline
-module add Singularity snakemake
-submit_asap $SNAKEFILE $EXTRA
-module remove Singularity snakemake
+#module add Singularity snakemake
+echo submit_asap $SNAKEFILE $EXTRA
+#module remove Singularity snakemake
