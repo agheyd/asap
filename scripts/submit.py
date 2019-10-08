@@ -3,12 +3,28 @@ import subprocess, argparse, yaml, os
 
 def parseArgs():
     parser = argparse.ArgumentParser(description='Receive command line arguments')
+
     parser.add_argument('snakefile', type=os.path.abspath, help='Path to snakefile')
-    parser.add_argument('--until', type=str, metavar="TARGET", help='Runs the pipeline until it reaches the specified rules or files. Only runs jobs that are dependencies of the specified rule or files, does not run sibling DAGs.')
-    parser.add_argument('--configfile', type=str, help='Specify or overwrite the config file of the workflow'
-                        '(see the docs). Values specified in JSON or YAML'
-                        'format are available in the global config dictionary'
-                        'inside the workflow.')
+
+    parser.add_argument('--until', type=str, metavar="TARGET", help=('''
+    Runs the pipeline until it reaches the specified rules or files.
+    Only runs jobs that are dependencies of the specified rule or files,
+    does not run sibling DAGs.
+    '''))
+
+    parser.add_argument('--configfile', metavar="CONFIG", type=str, help=('''
+    Specify or overwrite the config file of the workflow
+    (see the docs). Values specified in JSON or YAML
+    format are available in the global config dictionary
+    inside the workflow.
+    '''))
+
+    parser.add_argument('--tool', choices=["miso", "rmats", "whippet", "all"], type=str, default="all", help=('''
+    Specify which tools to include if only running a subset of tools.
+    Currently performs overlap analysis only if all tools are included.
+    Default: all
+    '''))
+
     args = parser.parse_args()
     return args
 
@@ -33,22 +49,30 @@ def AddExtra(args):
     extra = ''
 
     if args.until:
-        extra += "--until {}".format(args.until)
+        extra += "--until {} ".format(args.until)
     else:
         pass
 
     if args.configfile:
-        extra += "--configfile {}".format(args.configfile)
+        extra += "--configfile {} ".format(args.configfile)
     else:
         pass
+
+    if args.tool:
+        if args.tool == "miso":
+            extra += "--until AddMisoCoord "
+        elif args.tool == "rmats":
+            extra += "--until AddrMATSCoord "
+        elif args.tool == "whippet":
+            extra += "--until WhippetDelta "
+        elif args.tool == "all":
+            extra += ""
 
     return extra
 
 def RunSnake():
 
     args = parseArgs()
-    wdir = os.path.dirname(args.snakefile)
-    os.chdir(wdir)
 
     snakefile_path = args.snakefile
     cluster_cmd = ClusterCmd()
