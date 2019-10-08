@@ -23,10 +23,10 @@ Run
 
 2. Launch pipeline
 ```
-sbatch /path/to/dir/scripts/cluster_submit.sh /path/to/dir/Snakefile
+nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile &
 ```
 
 3. You can run individual tools by specifying this as a separate argument
 ```
-sbatch /path/to/dir/scripts/cluster_submit.sh /path/to/dir/Snakefile miso|rmats|whippet
+nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile --tool miso|rmats|whippet
 ```
