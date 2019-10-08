@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ## Set up symbolic links to submission scripts
-mkdir ~/bin
-S_SCRIPT=$(readlink -f scripts/submit.py)
-ln -s $S_SCRIPT ~/bin/submit_asap
+#mkdir ~/bin
+#S_SCRIPT=$(readlink -f scripts/submit.py)
+#ln -s $S_SCRIPT ~/bin/submit_asap
 
 ## Install miniconda3
 wget -P ~/ https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
