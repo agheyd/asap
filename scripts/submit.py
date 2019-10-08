@@ -25,6 +25,10 @@ def parseArgs():
     Default: all
     '''))
 
+    parser.add_argument('--restart', metavar="NUM", type=str, default="3", help=('''
+    Number of times to restart failing jobs. Default: 3
+    '''))
+
     args = parser.parse_args()
     return args
 
@@ -68,6 +72,9 @@ def AddExtra(args):
         elif args.tool == "all":
             extra += ""
 
+    if args.restart:
+        extra += "--restart-times {}".format(args.restart)
+
     return extra
 
 def RunSnake():
@@ -85,7 +92,6 @@ def RunSnake():
     '--use-singularity '
     '--singularity-args "--bind /scratch:/scratch " '
     '--cluster "{}" '
-    '--restart-times 3 '
     '-s {} '
     '{}'
     ).format(cluster_cmd, snakefile_path, extra)
