@@ -22,7 +22,7 @@ rule GenerateIndex:
 
 rule StarAlign:
     input:
-        star_idx = rules.GenerateIndex.output,
+        star_idx = STAR_IDX,
         reads = GetReads
     output:
         path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam")

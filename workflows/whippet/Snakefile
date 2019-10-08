@@ -17,7 +17,7 @@ rule WhippetIndex:
 
 rule WhippetQuant:
     input:
-        idx = rules.WhippetIndex.output,
+        idx = WHIPPET_IDX,
         reads = GetReads
     output: path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz")
     threads: 8
