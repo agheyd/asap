@@ -2,7 +2,6 @@
 from os import path
 from itertools import combinations
 import pandas as pd
-import utils.getreads as ug
 
 ## Helper functions
 # TODO: Possible to modularize?
@@ -41,6 +40,7 @@ LOG_DIR = path.join(OUTPUT_DIR, "log")
 
 ## Star specific variables
 STAR_DIR = path.join(OUTPUT_DIR, "star")
+STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else path.join(STAR_DIR, "index", "Genome")
 
 ## Miso specific variables
 MISO_IDX_DIR = config["locations"]["miso_annotation_dir"]
@@ -55,3 +55,4 @@ RMATS_DIR = path.join(OUTPUT_DIR, "rmats")
 
 ## Whippet specific variables
 WHIPPET_DIR = path.join(OUTPUT_DIR, "whippet")
+WHIPPET_IDX = config["locations"]["whippet_idx"] if config["locations"]["whippet_idx"] != "" else path.join(WHIPPET_DIR, "index", "index.jls")
