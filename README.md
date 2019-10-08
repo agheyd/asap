@@ -21,12 +21,12 @@ Run
 
 1. Edit sample_sheet.csv and config.yml to match your current experiment
 
-2. Launch pipeline
+2. Launch pipeline on HPC
 ```
 nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile &
 ```
 
-3. You can run individual tools by specifying this as a separate argument
+3. You can run individual tools by specifying this as a separate command line argument
 ```
 nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile --tool miso|rmats|whippet
 ```
