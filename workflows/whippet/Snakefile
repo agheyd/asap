@@ -2,25 +2,31 @@ rule WhippetIndex:
     input:
         annotation = ANNOTATION,
         genome = GENOME
-    output: path.join(WHIPPET_DIR, "index", "index.jls")
-    threads: 4
+    output:
+        path.join(WHIPPET_DIR, "index", "index.jls")
+    threads:
+        4
     params:
         partition = "main",
         nodes = "1",
         ntasks = "4",
-        time = "01:00:00",
+        time = "02:00:00",
         mem = "8G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
-    log: path.join(LOG_DIR, "whippet_index", "whippet_index.log")
-    script: "scripts/whippet_index.py"
+    log:
+        path.join(LOG_DIR, "whippet_index", "whippet_index.log")
+    script:
+        "scripts/whippet_index.py"
 
 rule WhippetQuant:
     input:
         idx = WHIPPET_IDX,
         reads = GetReads
-    output: path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz")
-    threads: 8
+    output:
+        path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz")
+    threads:
+        8
     params:
         output_dir = path.join(WHIPPET_DIR, "quant", "{sample}"),
         partition = "main",
@@ -30,25 +36,47 @@ rule WhippetQuant:
         mem = "16G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
-    log: path.join(LOG_DIR, "whippet_quant", "{sample}.log")
-    script: "scripts/whippet_quant.py"
+    log:
+        path.join(LOG_DIR, "whippet_quant", "{sample}.log")
+    script:
+        "scripts/whippet_quant.py"
+
+def deltaInput(wildcards):
+
+    cond_a, cond_b = "{comparison}".format(comparison=wildcards).split("_vs_")
+
+    cond_a_samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index)
+    cond_a_files = [path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x)) for x in cond_a_samples]
+    cond_a_input = ",".join(cond_a_files)
+
+    cond_b_samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index)
+    cond_b_files = [path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x)) for x in cond_b_samples]
+    cond_b_input = ",".join(cond_b_files)
+
+    input_list = [cond_a_input, cond_b_input]
+
+    return input_list
 
 rule WhippetDelta:
-    input: expand(path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz"), sample=SAMPLES)
-    output: path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
-    threads: 4
+    input:
+        quants = expand(path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz"), sample=SAMPLES)
+    output:
+        path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
+    threads:
+        4
     params:
-        quant_path = path.join(WHIPPET_DIR, "quant"),
-        comparison = "{comparison}",
+        quant_subsets = deltaInput,
         output_path = path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}"),
         min_cov = config["parameters"]["whippet"]["min_cov"],
         min_sam = config["parameters"]["whippet"]["min_sam"],
         partition = "main",
         nodes = "1",
         ntasks = "4",
-        time = "02:00:00",
+        time = "01:00:00",
         mem = "8G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
-    log: path.join(LOG_DIR, "whippet_delta", "{comparison}.log")
-    script: "scripts/whippet_delta.py"
+    log:
+        path.join(LOG_DIR, "whippet_delta", "{comparison}.log")
+    script:
+        "scripts/whippet_delta.py"
