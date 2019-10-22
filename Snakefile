@@ -1,6 +1,3 @@
-## Define config file
-configfile: "config.yml"
-
 ## Include workflows
 include: "rules/common.smk"
 include: "workflows/star/Snakefile"
