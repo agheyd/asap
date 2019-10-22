@@ -13,7 +13,7 @@ if snakemake.config["parameters"]["star"]["index"]["sjdb_overhang"]:
 
 shell("STAR "
 "--runMode genomeGenerate "
-"--runThreadN {snakemake.threads} "
+"--runThreadN {snakemake.params.ntasks} "
 "--genomeDir {genome_dir} "
 "--outFileNamePrefix {genome_dir} "
 "--genomeFastaFiles {snakemake.input} "
