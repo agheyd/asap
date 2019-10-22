@@ -1,20 +1,26 @@
 ##Rules
 localrules: rMATSBamList, AddrMATSCoord
 
+def bamInput(wildcards):
+
+    samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == wildcards.condition].index)
+    bam_files = [path.join(STAR_DIR, "alignments", "{}".format(x), "Aligned.sortedByCoord.out.bam") for x in samples]
+    bam_input = ",".join(bam_files)
+
+    return bam_input
+
 rule rMATSBamList:
     input: expand(path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam"), sample=SAMPLES)
     output: path.join(RMATS_DIR, "lists", "{condition}.list")
-    threads: 1
     params:
-        condition = "{condition}",
-        bam_dir = path.join(STAR_DIR, "alignments")
+        bam_files = bamInput,
     script: "scripts/list_bams.py"
 
 rule RunrMATS:
     input:
         expand(path.join(RMATS_DIR, "lists", "{condition}.list"), condition=CONDITIONS)
     output:
-        path.join(RMATS_DIR, "{comparison}", "SE.MATS.JCEC.txt")
+        path.join(RMATS_DIR, "results", "{comparison}", "SE.MATS.JCEC.txt")
     params:
         annotation = ANNOTATION,
         comparison = "{comparison}",
@@ -22,7 +28,7 @@ rule RunrMATS:
         star_idx = path.join(STAR_DIR, "index"),
         cstat = config["parameters"]["rmats"]["cstat"],
         list_dir = path.join(RMATS_DIR, "lists"),
-        output_dir = path.join(RMATS_DIR, "{comparison}"),
+	output_dir = path.join(RMATS_DIR, "results", "{comparison}"),
         partition = "main",
         nodes = "1",
         ntasks = "6",
@@ -31,7 +37,7 @@ rule RunrMATS:
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     singularity:
-        "library://agheyd/default/rmats:latest"
+        "library://agheyd/default/asap:latest"
     log:
         path.join(LOG_DIR, "rmats", "run", "{comparison}.log")
     shell:
@@ -48,7 +54,7 @@ rule RunrMATS:
 
 rule AddrMATSCoord:
     input: rules.RunrMATS.output
-    output: path.join(RMATS_DIR, "{comparison}", "{comparison}.merged.w_coord.tsv")
+    output: path.join(RMATS_DIR, "results", "{comparison}", "{comparison}.merged.w_coord.tsv")
     threads: 1
     params:
         rmats_dir = path.join(RMATS_DIR, "{comparison}")
