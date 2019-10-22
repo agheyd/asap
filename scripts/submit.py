@@ -26,7 +26,9 @@ def parseArgs():
     '''))
 
     parser.add_argument('--restart', metavar="NUM", type=str, default="3", help=('''
-    Number of times to restart failing jobs. Default: 3
+    Number of times to restart failing jobs.
+    Mainly used for download pipelines where jobs might fail due to connectivity issues. 
+    Default: 3
     '''))
 
     args = parser.parse_args()
