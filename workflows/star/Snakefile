@@ -3,13 +3,11 @@ rule GenerateIndex:
         GENOME
     output:
         path.join(STAR_DIR, "index", "Genome")
-    threads:
-        6
     params:
         partition = "main",
         nodes = "1",
-        ntasks = "6",
-        time = "01:00:00",
+        ntasks = "8",
+        time = "02:00:00",
         mem = "32G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
@@ -26,13 +24,11 @@ rule StarAlign:
         reads = GetReads
     output:
         path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam")
-    threads:
-        6
     params:
         partition = "main",
         nodes = "1",
-        ntasks = "6",
-        time = "2:00:00",
+        ntasks = "8",
+        time = "3:00:00",
         mem = "32G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
