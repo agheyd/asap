@@ -1,5 +1,5 @@
 ##Rules
-localrules: rMATSBamList, AddrMATSCoord
+localrules: rMATSBamList
 
 def bamInput(wildcards):
 
@@ -28,7 +28,7 @@ rule RunrMATS:
         star_idx = path.join(STAR_DIR, "index"),
         cstat = config["parameters"]["rmats"]["cstat"],
         list_dir = path.join(RMATS_DIR, "lists"),
-	output_dir = path.join(RMATS_DIR, "results", "{comparison}"),
+        output_dir = path.join(RMATS_DIR, "results", "{comparison}"),
         partition = "main",
         nodes = "1",
         ntasks = "6",
@@ -53,9 +53,17 @@ rule RunrMATS:
         '''
 
 rule AddrMATSCoord:
-    input: rules.RunrMATS.output
-    output: path.join(RMATS_DIR, "results", "{comparison}", "{comparison}.merged.w_coord.tsv")
-    threads: 1
+    input:
+        rules.RunrMATS.output
+    output:
+        path.join(RMATS_DIR, "results", "{comparison}", "{comparison}.merged.w_coord.tsv")
     params:
-        rmats_dir = path.join(RMATS_DIR, "{comparison}")
+        partition = "main",
+        nodes = "1",
+        ntasks = "1",
+        time = "00:30:00",
+        mem = "8G",
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE,
+        rmats_dir = path.join(RMATS_DIR, "results", "{comparison}")
     script: "scripts/add_coord.py"
