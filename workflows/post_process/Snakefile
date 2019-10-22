@@ -1,7 +1,7 @@
 rule OverlapAll:
     input:
         miso = path.join(MISO_COMP_DIR, "{comparison}", "{comparison}.merged.w_coord.miso_bf"),
-        rmats = path.join(RMATS_DIR, "{comparison}", "{comparison}.merged.w_coord.tsv"),
+        rmats = path.join(RMATS_DIR, "results", "{comparison}", "{comparison}.merged.w_coord.tsv"),
         whippet = path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
     output:
         path.join(RESULT_DIR, "{comparison}", "overlap.all_tools.tab")
