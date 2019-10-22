@@ -24,6 +24,6 @@ shell("rmats.py "
 "--gtf {annotation} "
 "--bi {star_idx} "
 "--od {odir} "
-"--nthread {snakemake.threads} "
+"--nthread {snakemake.params.ntasks} "
 "--cstat {cstat}"
 "{log}")
