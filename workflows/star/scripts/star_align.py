@@ -4,7 +4,7 @@ from snakemake.shell import shell
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
 reads = snakemake.input.reads
-genome_dir = path.dirname(snakemake.input.star_idx[0])
+genome_dir = path.dirname(snakemake.input.star_idx)
 outprefix = path.dirname(snakemake.output[0]) + "/"
 extra = ""
 
@@ -12,7 +12,7 @@ if snakemake.config["parameters"]["star"]["align"]["2-pass-mode"]:
     extra += "--twopassMode Basic "
 
 shell("STAR "
-"--runThreadN {snakemake.threads} "
+"--runThreadN {snakemake.params.ntasks} "
 "--genomeDir {genome_dir} "
 "--readFilesIn {reads} "
 "--readFilesCommand zcat "
