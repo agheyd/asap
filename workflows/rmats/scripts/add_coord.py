@@ -16,4 +16,4 @@ parsed_data_dict = p.parser_function(data_dict)
 harmonized_data_dict = h.harmonizer_function(parsed_data_dict)
 rmats_final_output = pd.concat(harmonized_data_dict.values())
 
-rmats_final_output.to_csv(snakemake.output[0] , sep="\t", index=False)
+rmats_final_output.to_csv(snakemake.output[0], sep="\t", index=False)
