@@ -27,8 +27,12 @@ def parseArgs():
 
     parser.add_argument('--restart', metavar="NUM", type=str, default="3", help=('''
     Number of times to restart failing jobs.
-    Mainly used for download pipelines where jobs might fail due to connectivity issues. 
+    Mainly used for download pipelines where jobs might fail due to connectivity issues.
     Default: 3
+    '''))
+
+    parser.add_argument('--rerun', type=str, help=('''
+    Re-run all jobs the output of which is recognized as incomplete.
     '''))
 
     args = parser.parse_args()
@@ -75,7 +79,10 @@ def AddExtra(args):
             extra += ""
 
     if args.restart:
-        extra += "--restart-times {}".format(args.restart)
+        extra += "--restart-times {} ".format(args.restart)
+
+    if args.rerun:
+        extra += "--rerun-incomplete "
 
     return extra
 
