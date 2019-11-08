@@ -13,20 +13,20 @@ git clone https://github.com/agheyd/asap.git /path/to/dir
 
 2. Run install script
 ```
-bash /path/to/dir/install.sh
+/path/to/dir/install.sh
+```
+
+3. Install HPC submission script
+```
+pip install git+https://github.com/agheyd/submit2hpc.git
 ```
 
 Run
 ====
 
-1. Edit sample_sheet.csv and config.yml to match your current experiment
+1. Edit sample_sheet.csv and config.yml to match your experimental parameters
 
 2. Launch pipeline on HPC
 ```
-nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile &
-```
-
-3. You can run individual tools by specifying this as a separate command line argument
-```
-nohup ./path/to/dir/scripts/submit.py /path/to/dir/Snakefile --tool miso|rmats|whippet
+nohup submit2hpc --configfile /path/to/config.yml /path/to/dir/Snakefile &
 ```
