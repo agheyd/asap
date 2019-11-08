@@ -10,7 +10,9 @@ else
 	mkdir -p ~/modules/
 	bash ~/Miniconda3-latest-Linux-x86_64.sh -b -p ~/modules/miniconda3
 	rm ~/Miniconda3-latest-Linux-x86_64.sh
-	PATH=$PATH:~/modules/miniconda3/bin/
+	export PATH=$PATH:~/modules/miniconda3/bin/
+	## Export path to ~/.bashrc
+	echo "export PATH=$PATH:~/modules/miniconda3/bin/" >> ~/.bashrc
 fi
 
 ## Install Whippet if not already installed
@@ -23,6 +25,9 @@ else
 	tar -C ~/julia -xvzf ~/julia-0.6.4-linux-x86_64.tar.gz --strip-components=1
 	rm ~/julia-0.6.4-linux-x86_64.tar.gz
 	$HOME/julia/bin/julia -e 'Pkg.add("Whippet");using Whippet'
-	PATH="$PATH:$HOME/julia/bin"
-	PATH="$PATH:$HOME/.julia/v0.6/Whippet/bin/"
+	export PATH=$PATH:$HOME/julia/bin
+	export PATH=$PATH:$HOME/.julia/v0.6/Whippet/bin/
+	## Export path to ~/.bashrc
+	echo "export PATH=$PATH:$HOME/julia/bin" >> ~/.bashrc
+	echo "export PATH=$PATH:$HOME/.julia/v0.6/Whippet/bin/" >> ~/.bashrc
 fi
