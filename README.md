@@ -8,6 +8,7 @@ Install
 
 1. Git clone this repository
 ```
+mkdir -p /path/to/dir
 git clone https://github.com/agheyd/asap.git /path/to/dir
 ```
 
