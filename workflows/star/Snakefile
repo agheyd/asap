@@ -2,7 +2,7 @@ rule GenerateIndex:
     input:
         GENOME
     output:
-        path.join(STAR_DIR, "index", "Genome")
+        directory(path.join(STAR_DIR, "index"))
     params:
         partition = "main",
         nodes = "1",

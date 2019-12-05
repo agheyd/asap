@@ -4,7 +4,7 @@ from snakemake.shell import shell
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
 reads = snakemake.input.reads
-genome_dir = path.dirname(snakemake.input.star_idx)
+genome_dir = snakemake.input.star_idx[0]
 outprefix = path.dirname(snakemake.output[0]) + "/"
 extra = ""
 

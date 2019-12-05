@@ -1,0 +1,4 @@
+/home/didrio87/scripts/pipelines/asap/.snakemake/conda/562a89c0
+/home/didrio87/scripts/pipelines/asap/.snakemake/conda/06726d49
+/home/didrio87/scripts/pipelines/asap/.snakemake/conda/0e51a7ec
+/home/didrio87/scripts/pipelines/asap/.snakemake/conda/82925cd4
