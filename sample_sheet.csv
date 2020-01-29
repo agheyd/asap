@@ -1,4 +1,4 @@
-sample,read1,read2,condition
+sampleID,read1,read2,condition
 35C_1,ext_L12534-1_RAW-35C-1_S16_R1_001.fastq.gz,ext_L12534-1_RAW-35C-1_S16_R2_001.fastq.gz,35C
 35C_2,ext_L12535-1_RAW-35C-2_S17_R1_001.fastq.gz,ext_L12535-1_RAW-35C-2_S17_R2_001.fastq.gz,35C
 35C_3,ext_L12536-1_RAW-35C-3_S18_R1_001.fastq.gz,ext_L12536-1_RAW-35C-3_S18_R2_001.fastq.gz,35C
