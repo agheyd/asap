@@ -1,24 +1,23 @@
 ##Rules
 localrules: rMATSBamList
 
-def bamInput(wildcards):
-
-    samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == wildcards.condition].index)
-    bam_files = [path.join(STAR_DIR, "alignments", "{}".format(x), "Aligned.sortedByCoord.out.bam") for x in samples]
-    bam_input = ",".join(bam_files)
-
-    return bam_input
-
 rule rMATSBamList:
-    input: expand(path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam"), sample=SAMPLES)
+    input: expand(
+        path.join(
+            STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam"
+        ), sample=SAMPLES
+    )
     output: path.join(RMATS_DIR, "lists", "{condition}.list")
     params:
-        bam_files = bamInput,
+        bam_files = get_bam_files,
     script: "scripts/list_bams.py"
 
 rule RunrMATS:
     input:
-        expand(path.join(RMATS_DIR, "lists", "{condition}.list"), condition=CONDITIONS)
+        expand(
+            path.join(RMATS_DIR, "lists", "{condition}.list"),
+            condition=CONDITIONS
+        )
     output:
         path.join(RMATS_DIR, "results", "{comparison}", "SE.MATS.JCEC.txt")
     params:
@@ -29,6 +28,7 @@ rule RunrMATS:
         cstat = config["parameters"]["rmats"]["cstat"],
         list_dir = path.join(RMATS_DIR, "lists"),
         output_dir = path.join(RMATS_DIR, "results", "{comparison}"),
+        lib_type = config["parameters"]["general"]["lib_type"]
         partition = "main",
         nodes = "1",
         ntasks = "6",
@@ -49,14 +49,22 @@ rule RunrMATS:
         L1=${{list_dir}}/${{C1}}.list
         L2=${{list_dir}}/${{C2}}.list
 
-        rmats.py --b1 $L1 --b2 $L2 -t paired --readLength {params.read_len} --gtf {params.annotation} --bi {params.star_idx} --od {params.output_dir} --nthread {params.ntasks} --cstat {params.cstat}
+        rmats.py --b1 $L1 --b2 $L2 -t {params.lib_type} \
+        --readLength {params.read_len} --gtf {params.annotation} \
+        --bi {params.star_idx} --od {params.output_dir} \
+        --nthread {params.ntasks} --cstat {params.cstat}
         '''
 
 rule AddrMATSCoord:
     input:
         rules.RunrMATS.output
     output:
-        path.join(RMATS_DIR, "results", "{comparison}", "{comparison}.merged.w_coord.tsv")
+        path.join(
+            RMATS_DIR,
+            "results",
+            "{comparison}",
+            "{comparison}.merged.w_coord.tsv"
+        )
     params:
         partition = "main",
         nodes = "1",
