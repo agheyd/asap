@@ -24,6 +24,7 @@ def get_star_idx(wildcards):
     return STAR_IDX
 
 def get_aggregation_rule(wildcards):
+    '''Determines correct input for aggregation rule based on tool selection'''
     available_tools = ["miso", "rmats", "whippet"]
     tool_selection = config["parameters"]["general"]["tools"]
     truth_array = [
@@ -56,3 +57,18 @@ def get_aggregation_rule(wildcards):
                 comparison=COMPARISONS
             )
         return aggregation
+
+def get_bam_files(wildcards):
+    '''Input function for rules that require BAM files'''
+    samples = sorted(
+        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == wildcards.condition].index
+    )
+    bam_files = [path.join(
+            STAR_DIR,
+            "alignments",
+            "{}".format(x),
+            "Aligned.sortedByCoord.out.bam"
+        ) for x in samples]
+    bam_input = ",".join(bam_files)
+
+    return bam_input
