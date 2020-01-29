@@ -1,5 +1,6 @@
 ## Include workflows
-include: "rules/common.smk"
+include: "common/helpers.smk"
+include: "common/variables.smk"
 include: "workflows/star/Snakefile"
 include: "workflows/miso/Snakefile"
 include: "workflows/rmats/Snakefile"
@@ -9,4 +10,4 @@ include: "workflows/post_process/Snakefile"
 ## Collect output from all workflows
 rule all:
     input:
-        expand(path.join(RESULT_DIR, "{comparison}", "overlap.all_tools.tab"), comparison=COMPARISONS)
+        get_aggregation_rule
