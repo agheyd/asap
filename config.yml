@@ -12,10 +12,14 @@ locations:
 parameters:
   user:
     email: ""
-  
+
   general:
     read_length: 150
     lib_type: paired
+    tools:
+      - miso
+      - rmats
+      - whippet
 
   star:
     index:
