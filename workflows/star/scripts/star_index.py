@@ -4,7 +4,7 @@ from snakemake.shell import shell
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
 read_length = snakemake.config["parameters"]["general"]["read_length"]
-genome_dir = path.dirname(snakemake.output[0]) + "/"
+genome_dir = snakemake.output[0] + "/"
 annotation = snakemake.config["locations"]["annotation"]
 extra = ""
 
