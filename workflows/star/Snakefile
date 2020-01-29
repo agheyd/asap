@@ -6,9 +6,9 @@ rule GenerateIndex:
     params:
         partition = "main",
         nodes = "1",
-        ntasks = "8",
+        ntasks = "6",
         time = "02:00:00",
-        mem = "32G",
+        mem = "36G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     log:
@@ -20,16 +20,16 @@ rule GenerateIndex:
 
 rule StarAlign:
     input:
-        star_idx = STAR_IDX,
-        reads = GetReads
+        star_idx = get_star_idx,
+        reads = get_reads
     output:
         path.join(STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam")
     params:
         partition = "main",
         nodes = "1",
-        ntasks = "8",
+        ntasks = "6",
         time = "3:00:00",
-        mem = "32G",
+        mem = "36G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     log:
