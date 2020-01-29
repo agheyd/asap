@@ -1,29 +1,6 @@
-## Import packages
 from os import path
 from itertools import combinations
 import pandas as pd
-
-## Helper functions
-# TODO: Possible to modularize?
-def get_reads(wildcards):
-
-    entry = SAMPLE_SHEET.loc["{wildcard}".format(wildcard=wildcards)]
-    read1 = entry.read1
-    read2 = entry.read2
-
-    if str(read2) != "nan":
-        reads = [read1, read2]
-    elif str(read2) == "nan":
-        reads = [read1]
-
-    fq_path = config["locations"]["fq_dir"]
-    reads = [path.join(fq_path, x) for x in reads]
-
-    return reads
-
-def get_star_idx(wildcards):
-    STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else rules.GenerateIndex.output #path.join(STAR_DIR, "index")
-    return STAR_IDX
 
 ## Cluster variables
 EMAIL = config["parameters"]["user"]["email"]
