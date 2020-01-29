@@ -28,7 +28,7 @@ EMAIL_TYPE = "none" if EMAIL == "" else "end"
 ## General input variables
 GENOME = config["locations"]["genome"]
 ANNOTATION = config["locations"]["annotation"]
-SAMPLE_SHEET = pd.read_csv(config["locations"]["sample_sheet"]).set_index("sample")
+SAMPLE_SHEET = pd.read_csv(config["locations"]["sample_sheet"]).set_index("sampleID")
 SAMPLES = sorted(SAMPLE_SHEET.index)
 CONDITIONS = sorted(set(SAMPLE_SHEET["condition"]))
 COMPARISONS = ["{}_vs_{}".format(e[0], e[1]) for e in sorted(combinations(CONDITIONS, 2))]
