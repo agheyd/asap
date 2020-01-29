@@ -17,15 +17,14 @@ parameters:
     read_length: 150
     lib_type: paired
     tools:
-      - miso
       - rmats
       - whippet
 
   star:
     index:
-      sjdb_overhang: true
+      sjdb_overhang: false
     align:
-      2-pass-mode: true
+      2-pass-mode: false
 
   miso:
     annotations:
@@ -39,5 +38,5 @@ parameters:
     cstat: 0.0001
 
   whippet:
-    min_cov: 5 # Minimum number of reads for a single event to be included (default: 5)
-    min_sam: 1 # Minimum number of samples in a or in b for each event to be considered (default: 1)
+    min_cov: 10 # Minimum number of reads for a single event to be included (default: 5)
+    min_sam: 3 # Minimum number of samples in a or in b for each event to be considered (default: 1)
