@@ -5,7 +5,7 @@ import pandas as pd
 
 ## Helper functions
 # TODO: Possible to modularize?
-def GetReads(wildcards):
+def get_reads(wildcards):
 
     entry = SAMPLE_SHEET.loc["{wildcard}".format(wildcard=wildcards)]
     read1 = entry.read1
@@ -20,6 +20,10 @@ def GetReads(wildcards):
     reads = [path.join(fq_path, x) for x in reads]
 
     return reads
+
+def get_star_idx(wildcards):
+    STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else rules.GenerateIndex.output #path.join(STAR_DIR, "index")
+    return STAR_IDX
 
 ## Cluster variables
 EMAIL = config["parameters"]["user"]["email"]
@@ -40,7 +44,6 @@ LOG_DIR = path.join(OUTPUT_DIR, "log")
 
 ## Star specific variables
 STAR_DIR = path.join(OUTPUT_DIR, "star")
-STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else path.join(STAR_DIR, "index", "Genome")
 
 ## Miso specific variables
 MISO_IDX_DIR = config["locations"]["miso_annotation_dir"]
