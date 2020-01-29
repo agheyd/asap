@@ -1,5 +1,6 @@
 ## Cluster generated files
 
+nohup*
 slurm-*
 *.snakemake*
 *__pycache__*
