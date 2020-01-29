@@ -2,12 +2,18 @@
 localrules: rMATSBamList
 
 rule rMATSBamList:
-    input: expand(
-        path.join(
-            STAR_DIR, "alignments", "{sample}", "Aligned.sortedByCoord.out.bam"
-        ), sample=SAMPLES
-    )
-    output: path.join(RMATS_DIR, "lists", "{condition}.list")
+    input:
+        expand(
+            path.join(
+                STAR_DIR,
+                "alignments",
+                "{sample}",
+                "Aligned.sortedByCoord.out.bam"
+            ),
+            sample=SAMPLES
+        )
+    output:
+        path.join(RMATS_DIR, "lists", "{condition}.list")
     params:
         bam_files = get_bam_files,
     script: "scripts/list_bams.py"
@@ -28,7 +34,7 @@ rule RunrMATS:
         cstat = config["parameters"]["rmats"]["cstat"],
         list_dir = path.join(RMATS_DIR, "lists"),
         output_dir = path.join(RMATS_DIR, "results", "{comparison}"),
-        lib_type = config["parameters"]["general"]["lib_type"]
+        lib_type = config["parameters"]["general"]["lib_type"],
         partition = "main",
         nodes = "1",
         ntasks = "6",
