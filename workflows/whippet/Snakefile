@@ -24,16 +24,16 @@ rule WhippetQuant:
         idx = WHIPPET_IDX,
         reads = get_reads
     output:
-        path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz")
+        quant = path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.psi.gz"),
+        sam = path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.out.sam")
     threads:
-        8
+        6
     params:
-        output_dir = path.join(WHIPPET_DIR, "quant", "{sample}"),
         partition = "main",
         nodes = "1",
-        ntasks = "8",
+        ntasks = "6",
         time = "02:00:00",
-        mem = "16G",
+        mem = "8G",
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     log:
@@ -45,12 +45,22 @@ def deltaInput(wildcards):
 
     cond_a, cond_b = "{comparison}".format(comparison=wildcards).split("_vs_")
 
-    cond_a_samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index)
-    cond_a_files = [path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x)) for x in cond_a_samples]
+    cond_a_samples = sorted(
+        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index
+    )
+    cond_a_files = [
+        path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x))
+        for x in cond_a_samples
+    ]
     cond_a_input = ",".join(cond_a_files)
 
-    cond_b_samples = sorted(SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index)
-    cond_b_files = [path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x)) for x in cond_b_samples]
+    cond_b_samples = sorted(
+        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index
+    )
+    cond_b_files = [
+        path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x))
+        for x in cond_b_samples
+    ]
     cond_b_input = ",".join(cond_b_files)
 
     input_list = [cond_a_input, cond_b_input]
@@ -59,14 +69,19 @@ def deltaInput(wildcards):
 
 rule WhippetDelta:
     input:
-        quants = expand(path.join(WHIPPET_DIR, "quant", "{sample}.psi.gz"), sample=SAMPLES)
+        quants = expand(
+            path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.psi.gz"),
+            sample=SAMPLES
+        )
     output:
         path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
     threads:
         4
     params:
         quant_subsets = deltaInput,
-        output_path = path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}"),
+        output_path = path.join(
+            WHIPPET_DIR, "delta", "{comparison}", "{comparison}"
+        ),
         min_cov = config["parameters"]["whippet"]["min_cov"],
         min_sam = config["parameters"]["whippet"]["min_sam"],
         partition = "main",
