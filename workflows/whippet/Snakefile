@@ -49,7 +49,7 @@ def deltaInput(wildcards):
         SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index
     )
     cond_a_files = [
-        path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x))
+        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
         for x in cond_a_samples
     ]
     cond_a_input = ",".join(cond_a_files)
@@ -58,7 +58,7 @@ def deltaInput(wildcards):
         SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index
     )
     cond_b_files = [
-        path.join(WHIPPET_DIR, "quant", "{}.psi.gz".format(x))
+        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
         for x in cond_b_samples
     ]
     cond_b_input = ",".join(cond_b_files)
