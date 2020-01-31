@@ -1,5 +1,6 @@
 from os import path
 from snakemake.shell import shell
+from snakemake.utils import makedirs
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True)
 
@@ -11,6 +12,7 @@ extra = ""
 if snakemake.config["parameters"]["star"]["index"]["sjdb_overhang"]:
     extra += "--sjdbOverhang {} ".format(str(read_length - 1))
 
+makedirs(genome_dir)
 shell("STAR "
 "--runMode genomeGenerate "
 "--runThreadN {snakemake.params.ntasks} "
