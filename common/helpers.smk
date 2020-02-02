@@ -20,7 +20,10 @@ def get_reads(wildcards):
 
 def get_star_idx(wildcards):
     '''Determines correct path to star index folder'''
-    STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else rules.GenerateIndex.output #path.join(STAR_DIR, "index")
+    STAR_IDX = (
+        config["locations"]["star_idx"] if config["locations"]["star_idx"] != ""
+        else rules.GenerateIndex.output
+    )
     return STAR_IDX
 
 def get_aggregation_rule(wildcards):
@@ -72,3 +75,28 @@ def get_bam_files(wildcards):
     bam_input = ",".join(bam_files)
 
     return bam_input
+
+def deltaInput(wildcards):
+    '''Input function for whippet delta'''
+    cond_a, cond_b = "{comparison}".format(comparison=wildcards).split("_vs_")
+
+    cond_a_samples = sorted(
+        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index
+    )
+    cond_a_files = [
+        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
+        for x in cond_a_samples
+    ]
+    cond_a_input = ",".join(cond_a_files)
+
+    cond_b_samples = sorted(
+        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index
+    )
+    cond_b_files = [
+        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
+        for x in cond_b_samples
+    ]
+    cond_b_input = ",".join(cond_b_files)
+
+    input_list = [cond_a_input, cond_b_input]
+    return input_list
