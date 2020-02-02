@@ -27,6 +27,26 @@ rule WhippetQuant:
         quant = path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.psi.gz"),
         sam = path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.out.sam")
     threads:
+        4
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "02:00:00",
+        mem = "8G",
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
+    log:
+        path.join(LOG_DIR, "whippet_quant", "{sample}.log")
+    script:
+        "scripts/whippet_quant.py"
+
+rule ConvertSam:
+    input:
+        rules.WhippetQuant.output.sam
+    output:
+        path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.out.bam")
+    threads:
         6
     params:
         partition = "main",
@@ -37,41 +57,72 @@ rule WhippetQuant:
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     log:
-        path.join(LOG_DIR, "whippet_quant", "{sample}.log")
-    script:
-        "scripts/whippet_quant.py"
+        path.join(LOG_DIR, "whippet", "convert_sam", "{sample}.log")
+    conda:
+        "envs/samtools.yml"
+    shell:
+        '''
+        samtools view -b -o {output} -@ {params.ntasks} {input}
+        '''
 
-def deltaInput(wildcards):
+rule SortBam:
+    input:
+        rules.ConvertSam.output
+    output:
+        path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.sorted.bam")
+    threads:
+        6
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "6",
+        time = "02:00:00",
+        mem = "12G",
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
+    log:
+        path.join(LOG_DIR, "whippet", "sort_bam", "{sample}.log")
+    conda:
+        "envs/samtools.yml"
+    shell:
+        '''
+        samtools sort -m 2G -o {output} -@ {params.ntasks} {input}
+        rm {input}
+        '''
 
-    cond_a, cond_b = "{comparison}".format(comparison=wildcards).split("_vs_")
-
-    cond_a_samples = sorted(
-        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_a].index
-    )
-    cond_a_files = [
-        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
-        for x in cond_a_samples
-    ]
-    cond_a_input = ",".join(cond_a_files)
-
-    cond_b_samples = sorted(
-        SAMPLE_SHEET[SAMPLE_SHEET["condition"] == cond_b].index
-    )
-    cond_b_files = [
-        path.join(WHIPPET_DIR, "quant", x, "{}.psi.gz".format(x))
-        for x in cond_b_samples
-    ]
-    cond_b_input = ",".join(cond_b_files)
-
-    input_list = [cond_a_input, cond_b_input]
-
-    return input_list
+rule WhippetIndexBam:
+    input:
+        rules.SortBam.output
+    output:
+        path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.sorted.bam.bai")
+    threads:
+        4
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "02:00:00",
+        mem = "12G",
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
+    log:
+        path.join(LOG_DIR, "whippet", "index_bam", "{sample}.log")
+    conda:
+        "envs/samtools.yml"
+    shell:
+        '''
+        samtools index -@ {params.ntasks} {input}
+        '''
 
 rule WhippetDelta:
     input:
-        quants = expand(
-            path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.psi.gz"),
-            sample=SAMPLES
+        expand(
+            path.join(
+                WHIPPET_DIR,
+                "quant",
+                "{sample}",
+                "{sample}.sorted.bam.bai"
+            ), sample=SAMPLES
         )
     output:
         path.join(WHIPPET_DIR, "delta", "{comparison}", "{comparison}.diff.gz")
@@ -95,3 +146,8 @@ rule WhippetDelta:
         path.join(LOG_DIR, "whippet_delta", "{comparison}.log")
     script:
         "scripts/whippet_delta.py"
+
+# quants = expand(
+#     path.join(WHIPPET_DIR, "quant", "{sample}", "{sample}.psi.gz"),
+#     sample=SAMPLES
+# )
