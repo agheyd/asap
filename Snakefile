@@ -10,4 +10,4 @@ include: "workflows/post_process/Snakefile"
 ## Collect output from all workflows
 rule all:
     input:
-        get_aggregation_rule
+        expand(path.join(RESULT_DIR, "{comparison}", "overlap.all_tools.tab"), comparison=COMPARISONS)

@@ -97,8 +97,8 @@ def assign_group(tool_selection, entry):
         entry["group"] = "none"
     return entry
 
-tool_selection = config["parameters"]["general"]["tools"]
-output_dir = config["locations"]["output_dir"]
+tool_selection = snakemake.config["parameters"]["general"]["tools"]
+output_dir = snakemake.config["locations"]["output_dir"]
 comparison = snakemake.wildcards.comparison
 tables = get_tables_array(tool_selection, output_dir, comparison)
 
@@ -112,4 +112,4 @@ df_w_group = (
     df_w_significance.apply(lambda x: assign_group(tool_selection, x), axis=1)
     .drop_duplicates()
 )
-df_w_group.to_csv(snakemake.output, sep="\t", index=False)
+df_w_group.to_csv(snakemake.output[0], sep="\t", index=False)
