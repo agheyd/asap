@@ -21,7 +21,7 @@ def get_reads(wildcards):
 def get_star_idx(wildcards):
     '''Determines correct path to star index folder'''
     STAR_IDX = (
-        config["locations"]["star_idx"] if config["locations"]["star_idx"] != ""
+        config["locations"]["star_idx_dir"] if config["locations"]["star_idx_dir"] != ""
         else rules.GenerateIndex.output
     )
     return STAR_IDX
