@@ -8,6 +8,7 @@ def get_tables_array(tool_selection, output_dir, comparison):
     tables = []
     for t in tool_selection:
         if t == "miso":
+            # TODO: Complete MISO section
             pass
         if t == "rmats":
             diff_tables = glob(
@@ -28,11 +29,12 @@ def format_cols(df_array, comparison):
     condition_A, condition_B = comparison.split("_vs_")
     for df in df_array:
         if "bayes_factor" in df.columns:
+            # TODO: Complete MISO section
             pass
         elif "FDR" in df.columns:
-            rmats_cols = "coord event_type strand IncLevel1 IncLevel2 IncLevelDifference FDR".split()
+            rmats_cols = "geneSymbol coord event_type strand IncLevel1 IncLevel2 IncLevelDifference FDR".split()
             rmats_cols_rename = (
-                "coord event_type strand rmats_psi_{} rmats_psi_{} rmats_dpsi rmats_fdr"
+                "rmats_gene_name coord event_type strand rmats_psi_{} rmats_psi_{} rmats_dpsi rmats_fdr"
                 .format(condition_A,condition_B).split()
             )
             df_subset = df[rmats_cols]
