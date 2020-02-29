@@ -1,17 +1,18 @@
 import pandas as pd
 
-def harmonize_columns(rmats_table):
+def format_cols(rmats_table):
 
-    rmats_include_cols = ['ID', 'GeneID', 'geneSymbol', 'chr', 'strand', 'IncFormLen',
-                          'SkipFormLen', 'PValue', 'FDR', 'IncLevel1', 'IncLevel2',
-                          'IncLevelDifference', 'event_type', 'coord']
+    rmats_include_cols = [
+        'ID', 'GeneID', 'geneSymbol',
+        'chr', 'strand', 'IncFormLen',
+        'SkipFormLen', 'PValue', 'FDR',
+        'IncLevel1', 'IncLevel2', 'IncLevelDifference',
+        'event_type', 'coord'
+    ]
 
-    harmonized_table = rmats_table[rmats_include_cols]
-
-    return harmonized_table
+    return rmats_table[rmats_include_cols]
 
 def melt_mxe(mxe_table):
-
     mxe_table_new = pd.DataFrame()
 
     for index, row in mxe_table.iterrows():
@@ -32,18 +33,18 @@ def melt_mxe(mxe_table):
 
     return mxe_table_new_harmonized
 
-def harmonizer_function(data_dict):
+def format(data_dict):
 
     for k,i in data_dict.items():
         if k == "A3SS":
-            data_dict[k] = harmonize_columns(data_dict[k])
+            data_dict[k] = format_cols(data_dict[k])
         elif k == "A5SS":
-            data_dict[k] = harmonize_columns(data_dict[k])
+            data_dict[k] = format_cols(data_dict[k])
         elif k == "MXE":
             data_dict[k] = melt_mxe(data_dict[k])
         elif k == "SE":
-            data_dict[k] = harmonize_columns(data_dict[k])
+            data_dict[k] = format_cols(data_dict[k])
         elif k == "RI":
-            data_dict[k] = harmonize_columns(data_dict[k])
+            data_dict[k] = format_cols(data_dict[k])
 
     return data_dict
