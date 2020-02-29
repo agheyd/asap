@@ -29,7 +29,7 @@ def melt_mxe(mxe_table):
 
         entry = pd.concat([ae1_entry, ae2_entry], axis=1).T
         mxe_table_new = mxe_table_new.append(entry)
-        mxe_table_new_harmonized = harmonize_columns(mxe_table_new)
+        mxe_table_new_harmonized = format_cols(mxe_table_new)
 
     return mxe_table_new_harmonized
 

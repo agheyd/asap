@@ -20,7 +20,11 @@ def get_reads(wildcards):
 
 def get_star_idx(wildcards):
     '''Determines correct path to star index folder'''
-    STAR_IDX = config["locations"]["star_idx"] if config["locations"]["star_idx"] != "" else rules.GenerateIndex.output #path.join(STAR_DIR, "index")
+    STAR_IDX = (
+        config["locations"]["star_idx_dir"] if
+        config["locations"]["star_idx_dir"] != "" else
+        rules.GenerateIndex.output
+    ) #path.join(STAR_DIR, "index")
     return STAR_IDX
 
 def get_aggregation_rule(wildcards):
