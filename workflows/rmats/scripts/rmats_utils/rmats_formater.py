@@ -7,31 +7,10 @@ def format_cols(rmats_table):
         'chr', 'strand', 'IncFormLen',
         'SkipFormLen', 'PValue', 'FDR',
         'IncLevel1', 'IncLevel2', 'IncLevelDifference',
-        'event_type', 'coord'
+        'event_type', 'coord', 'flank'
     ]
 
     return rmats_table[rmats_include_cols]
-
-def melt_mxe(mxe_table):
-    mxe_table_new = pd.DataFrame()
-
-    for index, row in mxe_table.iterrows():
-        entry = row
-
-        ae1 = entry.coord_ae1
-        ae1_entry = entry.copy()
-        ae1_entry["coord"] = ae1
-
-        ae2 = entry.coord_ae2
-        ae2_entry = entry.copy()
-        ae2_entry["coord"] = ae2
-        ae2_entry["IncLevelDifference"] = -ae2_entry["IncLevelDifference"]
-
-        entry = pd.concat([ae1_entry, ae2_entry], axis=1).T
-        mxe_table_new = mxe_table_new.append(entry)
-        mxe_table_new_harmonized = format_cols(mxe_table_new)
-
-    return mxe_table_new_harmonized
 
 def format(data_dict):
 
@@ -41,7 +20,7 @@ def format(data_dict):
         elif k == "A5SS":
             data_dict[k] = format_cols(data_dict[k])
         elif k == "MXE":
-            data_dict[k] = melt_mxe(data_dict[k])
+            data_dict[k] = format_cols(data_dict[k])
         elif k == "SE":
             data_dict[k] = format_cols(data_dict[k])
         elif k == "RI":
