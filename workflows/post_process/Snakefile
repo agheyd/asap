@@ -2,7 +2,13 @@ rule OverlapAll:
     input:
         get_aggregation_rule
     output:
-        path.join(RESULT_DIR, "{comparison}", "overlap.all_tools.tab")
+        temp(
+            path.join(
+                RESULT_DIR,
+                "{comparison}",
+                "overlap.tmp"
+            )
+        )
     params:
         partition = "main",
         nodes = "1",
@@ -13,3 +19,23 @@ rule OverlapAll:
         mail_type = EMAIL_TYPE
     script:
         "scripts/overlap.py"
+
+rule AssignNames:
+    input:
+        rules.OverlapAll.output
+    output:
+        path.join(
+            RESULT_DIR,
+            "{comparison}",
+            "overlap.alltools.tab"
+        )
+    params:
+        partition = "main",
+        nodes = "1",
+        ntasks = "4",
+        time = "00:20:00",
+        mem = "8G",
+        mail_user = EMAIL,
+        mail_type = EMAIL_TYPE
+    script:
+        "scripts/assign_names.py"
