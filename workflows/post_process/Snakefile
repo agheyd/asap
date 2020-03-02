@@ -38,4 +38,4 @@ rule AssignNames:
         mail_user = EMAIL,
         mail_type = EMAIL_TYPE
     script:
-        "scripts/assign_names.py"
+        "scripts/assign_names.R"
