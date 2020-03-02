@@ -13,17 +13,4 @@ def format_cols(rmats_table):
     return rmats_table[rmats_include_cols]
 
 def format(data_dict):
-
-    for k,i in data_dict.items():
-        if k == "A3SS":
-            data_dict[k] = format_cols(data_dict[k])
-        elif k == "A5SS":
-            data_dict[k] = format_cols(data_dict[k])
-        elif k == "MXE":
-            data_dict[k] = format_cols(data_dict[k])
-        elif k == "SE":
-            data_dict[k] = format_cols(data_dict[k])
-        elif k == "RI":
-            data_dict[k] = format_cols(data_dict[k])
-
-    return data_dict
+    return {k:format_cols(v) for (k,v) in data_dict.items()}
