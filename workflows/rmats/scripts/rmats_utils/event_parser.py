@@ -1,14 +1,14 @@
 def parse_a3ss(x):
 
     if x.strand == "+":
-        event_start = x.longExonStart_0base
+        event_start = x.longExonStart_0base + 1
         event_end = x.shortES
     elif x.strand == "-":
-        event_start = x.shortEE
+        event_start = x.shortEE + 1
         event_end = x.longExonEnd
 
     x["coord"] = "{}:{}-{}".format(
-        x.chr, str(event_start + 1), str(event_end)
+        x.chr, event_start, event_end
     )
     x["flank"] = "{}:{}-{}".format(
         x.chr, x.flankingES, x.flankingEE
@@ -19,14 +19,14 @@ def parse_a3ss(x):
 def parse_a5ss(x):
 
     if x.strand == "+":
-        event_start = x.shortEE
+        event_start = x.shortEE + 1
         event_end = x.longExonEnd
     elif x.strand == "-":
         event_start = x.longExonStart_0base
         event_end = x.shortES
 
     x["coord"] = "{}:{}-{}".format(
-        x.chr, str(event_start + 1), str(event_end)
+        x.chr, event_start, event_end
     )
     x["flank"] = "{}:{}-{}".format(
         x.chr, x.flankingES, x.flankingEE
@@ -37,9 +37,9 @@ def parse_a5ss(x):
 def parse_mxe(x):
     x["coord"] = "{}:{}-{}:{}-{}".format(
         x.chr,
-        x["1stExonStart_0base"],
+        x["1stExonStart_0base"] + 1,
         x["1stExonEnd"],
-        x["2ndExonStart_0base"],
+        x["2ndExonStart_0base"] + 1,
         x["2ndExonEnd"]
     )
     x["flank"] = "{chr}:{u_start}-{u_end},{chr}:{d_start}-{d_end}".format(
@@ -52,11 +52,8 @@ def parse_mxe(x):
     return x
 
 def parse_ri(x):
-
-    event_start = str(x.upstreamEE + 1)
-    event_end = str(x.downstreamES)
     x["coord"] = "{}:{}-{}".format(
-        x.chr, event_start, event_end
+        x.chr, x.upstreamEE + 1, x.downstreamES
     )
     x["flank"] = "{chr}:{u_start}-{u_end},{chr}:{d_start}-{d_end}".format(
         chr = x.chr,
@@ -68,11 +65,8 @@ def parse_ri(x):
     return x
 
 def parse_se(x):
-    event_start = str(x.exonStart_0base + 1)
-    event_end = str(x.exonEnd)
-
     x["coord"] = "{}:{}-{}".format(
-        x.chr, event_start, event_end
+        x.chr, x.exonStart_0base + 1, x.exonEnd
     )
     x["flank"] = "{chr}:{u_start}-{u_end},{chr}:{d_start}-{d_end}".format(
         chr = x.chr,
