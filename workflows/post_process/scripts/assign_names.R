@@ -71,7 +71,8 @@ coords.consolidated <- coords.named %>%
 
 as.table.consolidated <- as.table %>%
   full_join(coords.consolidated) %>%
-  replace_na(list(gene = "unknown", gene_type = "unknown"))
+  replace_na(list(gene = "unknown", gene_type = "unknown")) %>%
+  select(c("gene", "gene_type", colnames(as.table)))
 
 # Write table to disc
 write_tsv(
