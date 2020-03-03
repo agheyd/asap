@@ -8,7 +8,7 @@ def get_tables_array(tool_selection, output_dir, comparison):
     tables = []
     for t in tool_selection:
         if t == "miso":
-            # TODO: Complete MISO section
+            # TODO: Implement
             pass
         if t == "rmats":
             diff_tables = glob(
@@ -29,12 +29,12 @@ def format_cols(df_array, comparison):
     condition_A, condition_B = comparison.split("_vs_")
     for df in df_array:
         if "bayes_factor" in df.columns:
-            # TODO: Complete MISO section
+            # TODO: Implement
             pass
         elif "FDR" in df.columns:
-            rmats_cols = "geneSymbol coord event_type strand IncLevel1 IncLevel2 IncLevelDifference FDR".split()
+            rmats_cols = "coord event_type strand flank IncLevel1 IncLevel2 IncLevelDifference FDR".split()
             rmats_cols_rename = (
-                "rmats_gene_name coord event_type strand rmats_psi_{} rmats_psi_{} rmats_dpsi rmats_fdr"
+                "coord event_type strand rmats_flank rmats_psi_{} rmats_psi_{} rmats_dpsi rmats_fdr"
                 .format(condition_A,condition_B).split()
             )
             df_subset = df[rmats_cols]
@@ -76,9 +76,13 @@ def assign_significance(tool_selection, dataframe):
     if "miso" in tool_selection:
         pass
     if "rmats" in tool_selection:
-        dataframe["rmats_significant"] = dataframe.apply(lambda x: significant_rmats(x), axis=1)
+        dataframe["rmats_significant"] = dataframe.apply(
+            lambda x: significant_rmats(x), axis=1
+        )
     if "whippet" in tool_selection:
-        dataframe["whippet_significant"] = dataframe.apply(lambda x: significant_whippet(x), axis=1)
+        dataframe["whippet_significant"] = dataframe.apply(
+            lambda x: significant_whippet(x), axis=1
+        )
     return dataframe
 
 def assign_group(tool_selection, entry):
